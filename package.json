@@ -1,6 +1,6 @@
 {
   "name": "doorkeeper",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "SSH login based on keys from composer",
   "author": "Nodejitsu Inc <info@nodejitsu.com>",
   "repository": {
