@@ -1,0 +1,58 @@
+#!/usr/bin/env node
+var fs = require('fs'),
+    http = require('http'),
+    path = require('path');
+
+var configs = [
+  '/etc/doorkeeper',
+  path.join(process.env.HOME, '.quillconf'),
+  '/root/.quillconf'
+];
+
+var config = configs.filter(fs.existsSync)[0];
+if (!config) {
+  process.exit(1);
+}
+
+config = JSON.parse(fs.readFileSync(config));
+
+function onKeys(err, keys) {
+  if (err || !keys) {
+    //
+    // If there was an error getting keys, simply exit from the process. OpenSSH
+    // will proceed with its `authorized_keys` lookup.
+    //
+    process.exit(2);
+  }
+
+  keys.forEach(function (key) {
+    key.key && process.stdout.write(key.key + '\n');
+  });
+}
+
+var req = http.request({
+  host: config.remoteHost,
+  port: config.port || 9003,
+  path: '/keys'
+});
+
+req.on('error', onKeys);
+req.on('response', function (res) {
+  var data = '';
+
+  res.on('data', function (chunk) {
+    data += chunk;
+  });
+
+  res.on('end', function () {
+    try {
+      data = JSON.parse(data);
+    }
+    catch (ex) {
+      return onKeys(ex);
+    }
+
+    onKeys(null, data.keys);
+  });
+});
+req.end();
