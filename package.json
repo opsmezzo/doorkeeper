@@ -1,0 +1,14 @@
+{
+  "name": "doorkeeper",
+  "version": "0.0.0",
+  "description": "SSH login based on keys from composer",
+  "author": "Nodejitsu Inc <info@nodejitsu.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/opsmezzo/doorkeeper.git"
+  },
+  "keywords": ["ssh", "key", "configuration management", "opsmezzo", "sysadmin"],
+  "bin": {
+    "doorkeeper": "./bin/doorkeeper"
+  }
+}
